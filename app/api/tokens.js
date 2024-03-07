@@ -86,18 +86,20 @@ import axios from 'axios';
 //    }
 // };
 
-export const Fetchicon = async () => {
-   try {
-      const iconResponse = await axios.get(
-         `https://sideshift.ai/api/v2/coins/icon/BTC`
-      );
-      console.log(iconResponse, 'icons');
+// export const Fetchicon = async () => {
+//    try {
+//       const iconResponse = await axios.get(
+//           `https://sideshift.ai/api/v2/coins/icon/BTC`
+//           https://sideshift.ai/api/v2/pair/:from/:to
 
-      return iconResponse;
-   } catch (error) {
-      console.log(error);
-   }
-};
+//       );
+//       console.log(iconResponse, 'icons');
+
+//       return iconResponse;
+//    } catch (error) {
+//       console.log(error);
+//    }
+// };
 export const FetchTokens = async () => {
    try {
       const coinsResponse = await axios.get(
@@ -129,7 +131,6 @@ export const FetchTokens = async () => {
          })
       );
       console.log(coinsWithIcons);
-
       return coinsWithIcons;
    } catch (error) {
       console.error('Error fetching data:', error);
@@ -137,34 +138,15 @@ export const FetchTokens = async () => {
    }
 };
 
-// export const FetchTokens = async () => {
-//    try {
-//       const coinsResponse = await axios.get(
-//          'https://sideshift.ai/api/v2/coins'
-//       );
-//       const coins = coinsResponse.data;
+export const FetchPairToken = async () => {
+   try {
+      const iconResponse = await axios.get(
+         `https://sideshift.ai/api/v2/pair/eth/BCH`
+      );
+      console.log(iconResponse, 'icons');
 
-//       //   console.log(coins);
-//       //   Fetch icons for each coin
-//       const coinsWithIcons = await Promise.all(
-//          coins.map(async (coin) => {
-//             // console.log(coin);
-//             const iconResponse = await axios.get(
-//                `https://sideshift.ai/api/v2/coins/icon/${coin.coin}`
-//             );
-//             // console.log(iconResponse);
-//             const iconUrl = iconResponse; // Assuming the response contains the icon URL
-//             // console.log(iconUrl);
-//             return {
-//                ...coin, // Include all coin details
-//                iconUrl, // Add icon URL to coin object
-//             };
-//          })
-//       );
-//       console.log(coinsWithIcons);
-
-//       return coinsWithIcons;
-//    } catch (error) {
-//       console.log(error);
-//    }
-// };
+      return iconResponse;
+   } catch (error) {
+      console.log(error);
+   }
+};

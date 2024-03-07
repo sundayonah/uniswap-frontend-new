@@ -2,13 +2,17 @@
 import Header from '@/app/component/header';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import {FetchTokens,Fetchicon} from '@/app/api/tokens'
+import {FetchTokens,FetchPairToken} from '@/app/api/tokens'
 
 const Token = () => {
    const [selectedNetwork, setSelectedNetwork] = useState('Ethereum');
-   const [tokens, setTokens] = useState([]);
-   const [filteredTokens, setFilteredTokens] = useState([]);
+   const [tokens, setTokens] = useState<any[]>([]);
+   const [filteredTokens, setFilteredTokens] = useState<any[]>([]);
 
+function shortenAddress(address: string, startLength = 6, endLength = 4) {
+    if (!address) return '';
+    return `${address.substring(0, startLength)}...${address.substring(address.length - endLength)}`;
+}
 
 
    useEffect(() => {
@@ -16,18 +20,25 @@ const Token = () => {
          try {
  
            const response = await FetchTokens()
-           const fetchicon = await Fetchicon()
+           const fetchPairToken = await FetchPairToken()
            
+           console.log(fetchPairToken);
            console.log(response);
-           console.log(fetchicon);
-            // setTokens(response.data);
-            // setFilteredTokens(response.data);
+            setTokens(response);
+            setFilteredTokens(response);
          } catch (error) {
             console.error('Error fetching data:', error);
          }
       };
       fetchData();
    }, []);
+
+  // const networks = ['ethereum', 'solana', 'avax', 'polygon', 'dash', 'bitcoincash','cardano']; // Add more networks as needed
+
+// const contractAddress = networks
+//   .map(network => tokenDetails?.[network]?.contractAddress)
+//   .find(address => address !== undefined);
+
 
    // // Function to handle token filtering based on input valu
    // const handleTokenFilter = (e) => {
@@ -77,38 +88,9 @@ const Token = () => {
                     //  onChange={handleTokenFilter}
                   />
                </div>
-            </div>
+         </div>
 
-            {/* <div className="flex gap-6 mt-6">
-               {[
-                  'Ethereum',
-                  'Arbitrum',
-                  'Optimism',
-                  'BNB Chain',
-                  'Polygon',
-                  'Base',
-                  'Celo',
-                  'Avalanche',
-               ].map((network) => (
-                  <div
-                     key={network}
-                     className={`cursor-pointer ${
-                        selectedNetwork === network ? 'font-bold' : ''
-                     }`}
-                     onClick={() => handleNetworkChange(network)}
-                  >
-                     {network}
-                  </div>
-               ))}
-               <div>1D</div>
-               <div>
-                  <input
-                     className="bg-transparent border rounded-md px-2"
-                     placeholder="Filter Tokens"
-                     onChange={handleFilterChange}
-                  />
-               </div>
-            </div> */}
+            
             <div className="border border-gray-600 px-4 mb-4 rounded-lg mt-10 py-4 bg-[#121212]">
                <div className="grid grid-flow-col space-x-4 gap-3">
                   <span className="text-sm text-gray-500"># Token name</span>
@@ -117,67 +99,50 @@ const Token = () => {
                   <span className="text-sm text-gray-500">Contract Address</span>
                   <span className="text-sm text-gray-500">Decimail</span>
                </div>
-               {/* 
+               
                <div>
-                  {filteredTokens.map(
-                     (
-                        {
-                           id,
-                           name,
-                           symbol,
-                           logo,
-                           quote: {
-                              USD: { price, percent_change_1h, volume_24h },
-                           },
-                        },
-                        index
-                     ) => {
-                        // Determine text color based on percent_change_1h
-
-                        const textColor =
-                           percent_change_1h >= 0
-                              ? 'text-green-500'
-                              : 'text-red-500';
+            {tokens.map(
+                      ({ coin, iconUrl, name,networks, tokenDetails }, index) => {
+                        // Ensure tokenDetails and ethereum are defined before accessing contractAddress and decimals
+                const contractAddress = tokenDetails?.ethereum?.contractAddress || tokenDetails?.solana?.contractAddress || tokenDetails?.avax?.contractAddress || tokenDetails?.ronin?.contractAddress || tokenDetails?.polygon?.contractAddress || tokenDetails?.dash?.contractAddress || tokenDetails?.cardano?.contractAddress || tokenDetails?.doge?.contractAddress || tokenDetails?.polkadot?.contractAddress || tokenDetails?.cosmos?.contractAddress || tokenDetails?.algorand?.contractAddress || tokenDetails?.bitcoin?.contractAddress;
+                      //  const contractAddress = networks
+                      //   .map((network: string) => tokenDetails?.[network]?.contractAddress)
+                      //   .find((address: string | undefined) => address !== undefined);
+                        const decimals = tokenDetails?.ethereum?.decimals || tokenDetails?.solana?.decimals;
 
                         return (
-                           <div
-                              key={id}
-                              className="grid grid-flow-col mt-8 space-x-4 gap-3"
-                           >
-                              <span className="flex items-center gap-2 text-sm">
-                                 <p className="text-gray-500 text-sm">
-                                    {index + 1}
-                                 </p>{' '}
-                                 <img
-                                    src={logo}
-                                    width={20}
-                                    height={20}
-                                    alt="tokens logo"
-                                 />
-                                 {name}
-                                 <p className="text-gray-500">{symbol}</p>
-                              </span>
+                          <div
+                            key={coin}
+                            className="grid grid-flow-col mt-8 space-x-4 gap-3"
+                          >
+                            <span className="flex items-center gap-2 text-sm">
+                              <p className="text-gray-500 text-sm">
+                                {index + 1}
+                              </p>
+                              <img
+                                src={`data:image/svg+xml,${encodeURIComponent(iconUrl)}`}
+                                width={20}
+                                height={20}
+                                alt="tokens logo"
+                              />
+                              {name}
+                              <p className="text-gray-500 pr-4">{coin}</p>
+                            </span>
 
-                              <span className="text-sm">
-                                 $
-                                 {price.toLocaleString('en-US', {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                 })}
+                            <span className="text-sm">
+                              {networks.join(', ')} 
+                            </span>
+                            <span className="text-sm">
+                              {shortenAddress(contractAddress || 'N/A')}
                               </span>
-                              <span className="text-sm">
-                                 {percent_change_1h.toFixed(2)}
-                              </span>
-                              <span className="text-sm">$2.7B</span>
-                              <span className="text-sm">
-                                 ${formatVolume(volume_24h)}
-                              </span>
-                           </div>
+                            <span className="text-sm">
+                              {decimals || 'N/A'} 
+                            </span>
+                          </div>
                         );
-                        //  </div>
-                     }
-                  )}
-               </div> */}
+                      }
+                    )}
+               </div>
             </div>
          </div>
       </>
