@@ -12,11 +12,12 @@ const Header = () => {
       { id: 1, name: 'Swap', url: '/' },
       { id: 2, name: 'Token', url: '/token' },
       { id: 3, name: 'NFTs', url: '/nfts' },
+      { id: 3, name: 'Uniswap', url: '/uniswap' },
       { id: 4, name: 'Pools', url: '/pools' },
    ];
 
    return (
-      <main className="w-full flex justify-between  items-center fixed top-0  bg-opacity-10 backdrop-blur-md shadow-lg h-16 z-20">
+      <main className="w-full flex justify-between  items-center fixed top-0  bg-opacity-10 backdrop-blur-md shadow-lg h-16 z-20 mb-20">
          <div className="flex w-full p-4 justify-between items-center  shadow-custom">
             <div className=" flex gap-9 pr-2">
                <div>LOGO</div>
@@ -24,7 +25,7 @@ const Header = () => {
                <div className="flex gap-3">
                   {navMenu.map((menu) => (
                      <div key={menu.id} className="flex">
-                        <Link href={menu.url} className="">
+                        <Link href={menu.url} className="text-white">
                            {menu.name}
                         </Link>
                      </div>

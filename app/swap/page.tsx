@@ -5,6 +5,14 @@ import Header from '../component/header';
 
 import { ImageSvg } from '@/app/component/Image'
 import axios from 'axios';
+import { ethers } from 'ethers';
+import { Fetcher, Percent, Route, Token, TokenAmount, Trade, TradeType } from '@uniswap/sdk';
+import IUniswapV2Factory from '@uniswap/v2-core/build/IUniswapV2Factory.json';
+import Sample from '../component/TokenAPI';
+// import styles from './Button.module.css';
+
+// import { DAI, WETH } from '@uniswap/sdk-tokens'; // Adjust the import based on the actual library you're using
+
 
 
 // Define an interface for the coin objects
@@ -27,13 +35,139 @@ export const FetchPairToken = async (tokenIn: string, tokenOut:string) => {
 };
 
 const Swap = () => {
+
+  interface TokenAmountAndSlippage {
+  amount: number;
+    slippage: number;
+    walletAddress:string
+  }
+
+
+  // Define the token amount and slippage
+const args: TokenAmountAndSlippage = {
+    amount: 5, // Example amount
+    slippage: 50, // Example slippage in percentage
+    walletAddress: '0x1BB8Dd168a0A6B0d51e0343163aF38Baa330F7c3', // Example wallet address
+};
+  
+
+
+
 const [tokenIn, setTokenIn] = useState<string>('');
  const [tokenOut, setTokenOut] = useState<string>('');
  const [pairingInfo, setPairingInfo] = useState<any>(null); // Replace 'any' with the actual type of the pairing info if known
  const [coins, setCoins] = useState<Coin[]>([]); //
    const [isLoading, setIsLoading] = useState(false);
     const [amount, setAmount] = useState(''); // New state for the amount
+     const [isModalOpen, setIsModalOpen] = useState(false);
 
+//   // Define the addresses for DAI and WETH
+// const DAI_ADDRESS = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
+//   const WETH_ADDRESS = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+//   const BNB_ADDRESS = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
+//   const LINK_ADDRESS = '0x514910771AF9Ca656af840dff83E8264EcF986CA'
+
+//   const chainId = 5
+  
+//   // Create Token objects
+// const DAI = new Token(chainId, BNB_ADDRESS, 18, 'BNB', 'Binance Smart Chain');
+//   const WETH = new Token(chainId, LINK_ADDRESS, 18, 'LINK', 'LINK');
+  
+//   console.log({ DAI: DAI, WETH: WETH });
+
+//     const UNISWAP_ROUTER_CONTRACT_ADDRESS = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'; // Uniswap V2 Router contract address on Ethereum mainnet
+
+//   async function swapTokens(args:TokenAmountAndSlippage) {
+
+//     // Convert amountIn to a BigNumber
+// const amountInBigInt = BigInt(args.amount.toString());
+
+//  // Convert slippage to a BigInt
+//     const slippageBigInt = BigInt(args.slippage);
+
+//     // Convert slippage to a Percent type
+//     const percentSlippage = new Percent(slippageBigInt);
+
+
+//   const provider = new ethers.providers.JsonRpcProvider('https://goerli.infura.io/v3/1f9136b294e248fca6fce6f5c95a0811');
+
+//   // Fetch DAI and WETH pair
+//     const pair = await Fetcher.fetchPairData(DAI, WETH, provider);
+//     console.log(pair)
+
+//   // Create route
+//   const route = new Route([pair], WETH);
+
+//   console.log('Route:', route);
+// // // console.log('TokenAmount:', new TokenAmount(DAI, amountInBigInt));
+// // // console.log('TradeType:', TradeType.EXACT_INPUT);
+
+//    const trade = new Trade(
+//         route,
+//         new TokenAmount(DAI, amountInBigInt),
+//         TradeType.EXACT_INPUT, // or TradeType.EXACT_OUTPUT depending on your use case
+//         // { slippageTolerance: new Percent(slippageBigInt, 100) }
+//    );
+  
+// console.log('Trade:', trade);
+
+// // To get the execution price, you can use the `executionPrice` property of the Trade object
+// const executionPrice = trade.executionPrice;
+
+// // The executionPrice is a Price object, which represents the price of TokenA in terms of TokenB
+// // You can convert it to a human-readable format or use it directly in your application
+// console.log('Execution Price:', executionPrice.toSignificant(6)); // Adjust the number of significant digits as needed
+
+//   // Get minimum amount of WETH out
+//   const amountOutMin = trade.minimumAmountOut(percentSlippage);
+
+//   // Define path
+//   const path = [DAI_ADDRESS, WETH_ADDRESS];
+
+//   // Define recipient
+//   const to = args.walletAddress;
+//   console.log(to)
+
+//   // Set deadline
+//   const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 minutes from now
+
+//   // Convert value to hex
+//   const value = trade.inputAmount.raw;
+//   const valueHex = await ethers.BigNumber.from(value.toString()).toHexString();
+
+//   // Create a contract instance
+// const uniswapRouter = new ethers.Contract(
+//     UNISWAP_ROUTER_CONTRACT_ADDRESS,
+//     IUniswapV2Factory.abi,
+//     provider
+// );
+//   console.log(uniswapRouter)
+
+// // Example for swapping DAI for WETH
+// const tx = await uniswapRouter.populateTransaction.swapExactTokensForETH(
+//     args.amount,
+//     amountOutMin,
+//     path,
+//     to,
+//     deadline
+// );
+  
+  // console.log({tx}, 'transaction')
+  // Send the transaction
+  // const sendTxn = await wallet.sendTransaction(tx);
+  // console.log(sendTxn.hash, "to see your transaction");
+// }
+  
+// swapTokens(args)
+
+
+
+  // Example usage in a React component
+const handleClick = () => {
+  if (window.sideshift) {
+    window.sideshift.show();
+  }
+};
 
 
  useEffect(() => {
@@ -54,9 +188,17 @@ const [tokenIn, setTokenIn] = useState<string>('');
     event.preventDefault();
     setIsLoading(true); // Set loading state to true when the form is submitted
     const response = await FetchPairToken(tokenIn, tokenOut);
-    console.log(response)
+    // console.log(response)
     setPairingInfo(response?.data);
     setIsLoading(false); // Set loading state to false once the data is fetched
+ };
+
+    const handleTokenInClick = () => {
+    setIsModalOpen(true);
+ };
+
+ const handleTokenOutClick = () => {
+    setIsModalOpen(true);
  };
 
    return (
@@ -120,7 +262,19 @@ const [tokenIn, setTokenIn] = useState<string>('');
       {/* Display the pairing info here */}
       <pre className='mt-4 text-sm text-gray-500'>{JSON.stringify(pairingInfo, null, 2)}</pre>
     </div>
- )}
+       )}
+       <Sample />
+         {/* <button
+    onClick={() => window.sideshift && window.sideshift.show()}
+    id="sideshift-modal-button"
+    className={styles.sideshiftModalButton}
+  >
+    Shift Crypto
+  </button> */}
+       
+         <button onClick={handleClick} id="sideshift-modal-button">
+            Shift Crypto
+        </button>
 </div>
    );
 };

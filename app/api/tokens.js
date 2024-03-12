@@ -100,53 +100,66 @@ import axios from 'axios';
 //       console.log(error);
 //    }
 // };
-export const FetchTokens = async () => {
-   try {
-      const coinsResponse = await axios.get(
-         'https://sideshift.ai/api/v2/coins'
-      );
-      const coins = coinsResponse.data;
+// export const FetchTokens = async () => {
+//    try {
+//       const coinsResponse = await axios.get(
+//          'https://sideshift.ai/api/v2/coins'
+//       );
+//       const coins = coinsResponse.data;
 
-      const coinsWithIcons = await Promise.all(
-         coins.map(async (coin) => {
-            try {
-               const iconResponse = await axios.get(
-                  `https://sideshift.ai/api/v2/coins/icon/${coin.coin}`
-               );
-               const iconUrl = iconResponse.data; // Assuming the response contains the icon URL
-               return {
-                  ...coin, // Include all coin details
-                  iconUrl, // Add icon URL to coin object
-               };
-            } catch (iconError) {
-               console.warn(
-                  `Failed to fetch icon for coin: ${coin.coin}`,
-                  iconError
-               );
-               return {
-                  ...coin, // Include all coin details
-                  iconUrl: null, // Set iconUrl to null or a default icon URL
-               };
-            }
-         })
-      );
-      console.log(coinsWithIcons);
-      return coinsWithIcons;
-   } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error; // Re-throw the error so it can be handled by the caller
-   }
-};
+//       const coinsWithIcons = await Promise.all(
+//          coins.map(async (coin) => {
+//             try {
+//                const iconResponse = await axios.get(
+//                   `https://sideshift.ai/api/v2/coins/icon/${coin.coin}`
+//                );
+//                const iconUrl = iconResponse.data; // Assuming the response contains the icon URL
+//                return {
+//                   ...coin, // Include all coin details
+//                   iconUrl, // Add icon URL to coin object
+//                };
+//             } catch (iconError) {
+//                console.warn(
+//                   `Failed to fetch icon for coin: ${coin.coin}`,
+//                   iconError
+//                );
+//                return {
+//                   ...coin, // Include all coin details
+//                   iconUrl: null, // Set iconUrl to null or a default icon URL
+//                };
+//             }
+//          })
+//       );
+//       console.log(coinsWithIcons);
+//       return coinsWithIcons;
+//    } catch (error) {
+//       console.error('Error fetching data:', error);
+//       throw error; // Re-throw the error so it can be handled by the caller
+//    }
+// };
 
-export const FetchPairToken = async () => {
-   try {
-      const iconResponse = await axios.get(
-         `https://sideshift.ai/api/v2/pair/eth/BCH`
-      );
-      console.log(iconResponse, 'icons');
+// export const FetchPairToken = async () => {
+//    try {
+//       const iconResponse = await axios.get(
+//          `https://sideshift.ai/api/v2/pair/eth/BCH`
+//       );
+//       console.log(iconResponse, 'icons');
 
-      return iconResponse;
-   } catch (error) {
-      console.log(error);
-   }
-};
+//       return iconResponse;
+//    } catch (error) {
+//       console.log(error);
+//    }
+// };
+
+// export const FetchTokens = async () => {
+//    try {
+//       const iconResponse = await axios.get(
+//          `https://api.coinmarketcap.com/data-api/v3/uniswap/all.json`
+//       );
+//       console.log(iconResponse, 'icons');
+
+//       return iconResponse;
+//    } catch (error) {
+//       console.log(error);
+//    }
+// };

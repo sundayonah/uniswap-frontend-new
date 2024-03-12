@@ -1,10 +1,12 @@
 "use client"
 
+import Head from 'next/head'; // Import Head from next/head
 import './globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import { useState, useEffect } from 'react';
 import { RainbowKitProvider, getDefaultConfig,darkTheme } from '@rainbow-me/rainbowkit';
 import { Config, WagmiProvider } from 'wagmi';
+
 
 import {
   mainnet,
@@ -19,6 +21,7 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
+import Script from 'next/script';
 
 const metadata = {
   title: 'Uniswap',
@@ -47,6 +50,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+     {/* <Head>
+     
+      </Head> */}
       <body>
         {config && (
           <WagmiProvider config={config}>
@@ -57,6 +63,17 @@ export default function RootLayout({
             </QueryClientProvider>
           </WagmiProvider>
         )}
+        <Script id="sideshift-config" type="text/javascript">
+          {`window.__SIDESHIFT__ = {
+            parentAffiliateId: "I3Ewwmtec",
+            defaultDepositMethodId: "btc",
+            defaultSettleMethodId: "eth",
+            settleAddress: undefined,
+            type: "variable",
+            settleAmount: undefined,
+          }`}
+        </Script>
+        <Script src="https://sideshift.ai/static/js/main.js" strategy="beforeInteractive" />
       </body>
     </html>
   );
