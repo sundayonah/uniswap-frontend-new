@@ -88,7 +88,8 @@ const Modal: React.FC<ModalProps> = ({
                   Popular tokens
                </span>
                <div className="scroll-component w-full h-[calc(100vh-510px)] overflow-y-auto">
-                  {filteredTokens.map(({ logoURI, name, symbol, address }) => (
+                  {/* {filteredTokens.map(({ logoURI, name, symbol, address }) => ( */}
+                  {filterTokens.map(({ name, symbol, logoURI, address }) => (
                      <div
                         key={address}
                         className="flex items-center gap-2 space-y-3 px-4 hover:bg-slate-700 cursor-pointer"
