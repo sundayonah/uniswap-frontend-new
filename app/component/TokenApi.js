@@ -21,17 +21,17 @@ export const GetTokenDataAndPerformSwap = async (amount) => {
    try {
       // Define the tokens
       // Define the tokens
-      const token1 = new Token(
+      const token2 = new Token(
          ChainId.MAINNET,
-         '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-         18,
+         '0xdac17f958d2ee523a2206206994597c13d831ec7',
+         6,
          'WETH',
          'Wrapped Ether'
       );
-      const token2 = new Token(
+      const token1 = new Token(
          ChainId.MAINNET,
-         '0x6b175474e89094c44da98b954eedeac495271d0f',
-         //  '0xdac17f958d2ee523a2206206994597c13d831ec7',
+         '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+         // '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
          18,
          'USDT',
          'Tether'

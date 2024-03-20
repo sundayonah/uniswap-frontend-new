@@ -5,8 +5,8 @@ import Modal from '@/app/component/oldModal/modal';
 import axios from 'axios';
 import { SwapWidget } from '@uniswap/widgets';
 import { TokenJsonList } from '@/app/api/tokensJson';
-import { CreatePair } from './TokenAPI';
-import { GetTokenDataAndPerformSwap } from '@/app/component/TokenApi';
+import { CreatePair } from '@/app/component/TokenAPI';
+// import { GetTokenDataAndPerformSwap } from '@/app/component/TokenApi';
 import { ArrowDown } from '@/app/component/icons';
 import { BigNumber, ethers } from 'ethers';
 import { Token as UniswapToken } from '@uniswap/sdk-core';
@@ -81,85 +81,44 @@ const SwapUi = () => {
          frontendToken.decimals || 0
       );
    };
+   // GetTokenDataAndPerformSwap('1');
 
-   useEffect(() => {
-      const fetchData = async () => {
-         if (tokenIn && tokenOut && inputAmount) {
-            const uniswapTokenIn = convertToUniswapToken(tokenIn);
-            const uniswapTokenOut = convertToUniswapToken(tokenOut);
+   // CreatePair('1', uniswapTokenIn, uniswapTokenOut);
 
-            GetTokenDataAndPerformSwap(
-               inputAmount,
-               uniswapTokenIn,
-               uniswapTokenOut
-            );
-            try {
-               const pairs = await CreatePair(
-                  inputAmount,
-                  uniswapTokenIn,
-                  uniswapTokenOut
-               );
-               console.log(pairs, 'pair created successfully');
-               const {
-                  pair,
-                  exchangeRate,
-                  outputAmount,
-                  toFixedRatePerOne,
-                  finalExchange,
-                  formattedExchangeRate,
-               } = pairs;
-               setRate(finalExchange);
-               setOutputAmount(formattedExchangeRate);
-               console.log(exchangeRate, ' RATE');
-               console.log(outputAmount, 'output Amount');
-               console.log(formattedExchangeRate, 'formatted exchange rate');
-            } catch (error) {
-               console.error('Error creating pair:', error);
-            }
-         } else {
-            console.error(
-               'Both tokens must be selected before creating a pair.'
-            );
-         }
-      };
+   if (tokenIn && tokenOut && inputAmount) {
+      const uniswapTokenIn = convertToUniswapToken(tokenIn);
+      const uniswapTokenOut = convertToUniswapToken(tokenOut);
+      const inputAmountInWei = ethers.utils.parseUnits(
+         inputAmount,
+         tokenIn.decimals
+      );
 
-      fetchData();
-   }, [inputAmount, tokenIn, tokenOut]); // Dependencies array
+      const inputAmountInWeiString = inputAmountInWei.toString();
 
-   // if (tokenIn && tokenOut && inputAmount) {
-   //    const uniswapTokenIn = convertToUniswapToken(tokenIn);
-   //    const uniswapTokenOut = convertToUniswapToken(tokenOut);
-   //    // const inputAmountInWei = ethers.utils.parseUnits(
-   //    //    inputAmount,
-   //    //    tokenIn.decimals
-   //    // );
-
-   //    // const inputAmountInWeiString = inputAmountInWei.toString();
-
-   //    CreatePair(inputAmount, uniswapTokenIn, uniswapTokenOut)
-   //       .then((pairs) => {
-   //          console.log(pairs, 'pair created successfully');
-   //          const {
-   //             pair,
-   //             exchangeRate,
-   //             outputAmount,
-   //             toFixedRatePerOne,
-   //             finalExchange,
-   //             formattedExchangeRate,
-   //          } = pairs;
-   //          // const formatedRate = `1 ${tokenOut.symbol} = ${toFixedRatePerOne} ${tokenIn.symbol}`;
-   //          setRate(finalExchange);
-   //          setOutputAmount(formattedExchangeRate);
-   //          console.log(exchangeRate, ' RATE');
-   //          console.log(outputAmount, 'output Amount');
-   //          console.log(formattedExchangeRate, 'formatted exchange rate');
-   //       })
-   //       .catch((error) => {
-   //          console.error('Error creating pair:', error);
-   //       });
-   // } else {
-   //    console.error('Both tokens must be selected before creating a pair.');
-   // }
+      CreatePair(inputAmount, uniswapTokenIn, uniswapTokenOut)
+         .then((pairs) => {
+            console.log(pairs, 'pair created successfully');
+            const {
+               pair,
+               exchangeRate,
+               outputAmount,
+               toFixedRatePerOne,
+               finalExchange,
+               formattedExchangeRate,
+            } = pairs;
+            // const formatedRate = `1 ${tokenOut.symbol} = ${toFixedRatePerOne} ${tokenIn.symbol}`;
+            setRate(finalExchange);
+            setOutputAmount(formattedExchangeRate);
+            console.log(exchangeRate, ' RATE');
+            console.log(outputAmount, 'output Amount');
+            console.log(formattedExchangeRate, 'formatted exchange rate');
+         })
+         .catch((error) => {
+            console.error('Error creating pair:', error);
+         });
+   } else {
+      console.error('Both tokens must be selected before creating a pair.');
+   }
 
    // // GET TOKEN BALANCE
    // getTokenBalance(tokenOut?.address ?? '', account?.address ?? '')
@@ -174,19 +133,19 @@ const SwapUi = () => {
       return /^(?=.*[0-9]|0(?=\.))\d*(?:\.\d+)?$/.test(input);
    };
 
-   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const inputValue = event.target.value;
-      // Assuming tokenIn.decimals is correctly set
-      const decimals = tokenIn?.decimals || 18; // Provide a default value if decimals is undefined
-      const weiValue = ethers.utils.parseUnits(inputValue, decimals);
-      const humanReadableValue = ethers.utils.formatEther(weiValue);
+   // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   //    const inputValue = event.target.value;
+   //    // Assuming tokenIn.decimals is correctly set
+   //    const decimals = tokenIn?.decimals || 18; // Provide a default value if decimals is undefined
+   //    const weiValue = ethers.utils.parseUnits(inputValue, decimals);
+   //    const humanReadableValue = ethers.utils.formatEther(weiValue);
 
-      // Display the human-readable value to the user
-      console.log(humanReadableValue);
+   //    // Display the human-readable value to the user
+   //    console.log(humanReadableValue);
 
-      // Store the wei value for transaction purposes
-      setInputAmount(humanReadableValue);
-   };
+   //    // Store the wei value for transaction purposes
+   //    setInputAmount(humanReadableValue);
+   // };
 
    // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
    //    const inputValue = event.target.value;
@@ -332,9 +291,7 @@ const SwapUi = () => {
    const handleTokenSelect = (token: Token) => {
       if (currentSelection === 'A') {
          setTokenIn(token);
-         console.log(token);
       } else if (currentSelection === 'B') {
-         console.log(token);
          setTokenOut(token);
       }
       setIsModalOpen(false);

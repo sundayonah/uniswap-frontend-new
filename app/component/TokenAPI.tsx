@@ -41,7 +41,6 @@ interface TradeDetails {
    amountOut: CurrencyAmount<Currency>;
    quote: string;
    rate: number;
-   // Add any other details you need here
 }
 
 // export const CreatePair = async (
@@ -152,7 +151,7 @@ export const CreatePair = async (
       provider
    );
 
-   //  console.log(pairContract);
+   console.log(pairContract);
    const reserves = await pairContract['getReserves']();
    const [reserve0, reserve1] = reserves;
 
@@ -232,30 +231,27 @@ export const CreatePair = async (
    };
 };
 
-// Define your tokens
-const DAI = new Token(
+const WBTC = new Token(
    ChainId.MAINNET,
-   '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-   //  '0xdac17f958d2ee523a2206206994597c13d831ec7',
-   18,
-   'DAI',
-   'DAI'
-);
-
-// Assuming WETH9 is defined similarly
-const WETH9 = new Token(
-   ChainId.MAINNET,
-   //  '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
-   '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-   18,
-   'WETH9',
+   '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',
+   8,
+   'WETH',
    'Wrapped Ether'
 );
+const WETH9 = new Token(
+   ChainId.MAINNET,
+   '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 
-// CreatePair('1', WETH9, DAI)
-//    .then((result) => {
-//       console.log(result, 'Result...');
-//    })
-//    .catch((error) => {
-//       console.error('Error calculating output amount...:', error);
-//    });
+   //  '0xdac17f958d2ee523a2206206994597c13d831ec7',
+   18,
+   'WBTC',
+   'Wrapped Bitcoin'
+);
+
+CreatePair('1', WETH9, WBTC);
+//  .then((result) => {
+//     console.log(result, 'Result......');
+//  })
+//  .catch((error) => {
+//     console.error('Error calculating output amount...:', error);
+//  });
